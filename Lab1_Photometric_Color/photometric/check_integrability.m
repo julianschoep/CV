@@ -25,9 +25,9 @@ for i = 1:size(normals, 1)
     end
 end
 
-p1 = zeros(size(normals, 1), size(normals, 2));
-p1 = normals(:, :, 1) / normals(i, :, 3);
-assert(p == p1, 'p is equal to p1')
+% p1 = zeros(size(normals, 1), size(normals, 2));
+% p1 = normals(:, :, 1) / normals(:, :, 3);
+% assert(isequal(p, p1), 'p is not equal to p1')
 % ========================================================================
 
 p(isnan(p)) = 0;
@@ -40,7 +40,7 @@ q(isnan(q)) = 0;
 
 for i = 1:size(normals, 1)
     for j = 1:size(normals, 2)
-        SE(i, j) = p(i, j) / normals(i, j, 3) - q(i, j) / normals(i, j, 3) ;
+        SE(i, j) = (p(i, j) / normals(i, j, 3) - q(i, j) / normals(i, j, 3))^2;
     end
 end
 
