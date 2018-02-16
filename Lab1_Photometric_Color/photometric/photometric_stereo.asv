@@ -27,10 +27,13 @@ image_dir = './SphereGray5/';   % TODO: get the path of the script
 [h, w, n] = size(image_stack);
 fprintf('Finish loading %d images.\n\n', n);
 
-%%
 % compute the surface gradient from the stack of imgs and light source mat
 disp('Computing surface albedo and normal map...')
 [albedo, normals] = estimate_alb_nrm(image_stack, scriptV);
+
+%% show quiver plot
+figure(3)
+quiver3(1:h, 1:w, 1:50, normals(:, :, 1), normals(:, :, 2), normals(:, :, 3))
 
 %% integrability check: is (dp / dy  -  dq / dx) ^ 2 small everywhere?
 disp('Integrability checking')
@@ -42,22 +45,21 @@ fprintf('Number of outliers: %d\n\n', sum(sum(SE > threshold)));
 
 %% compute the surface height
 height_map = construct_surface( p, q );
+% figure(3)
+% quiver3(height_map, normals(:, :, 1), normals(:, :, 2), normals(:, :, 3))
+
+
 
 %% Display
 show_results(albedo, normals, SE);
 show_model(albedo, height_map);
 
-%% Attempt at quiver plot (can't figure out how to subsample)
+%% Attempt at quiver plot
 figure(1)
 quiver3(zeros(size(height_map)), normals(:, :, 1), normals(:, :, 2), normals(:, :, 3))
-
-%% Load RGB Images
-disp('Loading images...')
-image_dir = './SphereColor/';   % TODO: get the path of the script
-
-[image_stack, scriptV] = load_syn_images(image_dir, 3);
-[h, w, n, f] = size(image_stack);
-fprintf('Finish loading %dx%d images.\n\n', n, f);
+normals(1:2:end, 1:2:end, : = normals
+figure(2)
+quiver3(zeros(size(height_map)), normals(:, :, 1), normals(:, :, 2), normals(:, :, 3))
 %% Face
 [image_stack, scriptV] = load_face_images('./yaleB02/');
 [h, w, n] = size(image_stack);

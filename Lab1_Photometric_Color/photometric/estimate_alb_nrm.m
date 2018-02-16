@@ -57,7 +57,7 @@ end
 figure(3)
 imshow(albedo)
 figure(4)
-surf(normal)
+% surf(normal)
 
 % =========================================================================
 
