@@ -19,10 +19,6 @@ disp('Loading images...')
 image_dir = './MonkeyGray/';   % TODO: get the path of the script
 
 %%
-disp('Loading images...')
-image_dir = './SphereGray5/';   % TODO: get the path of the script
-
-%%
 [image_stack, scriptV] = load_syn_images(image_dir);
 [h, w, n] = size(image_stack);
 fprintf('Finish loading %d images.\n\n', n);
