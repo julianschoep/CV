@@ -19,7 +19,7 @@ end
 %   normal (3 channels)
 albedo = zeros(h, w, 1);
 normal = zeros(h, w, 3);
-
+resnorms = zeros(h,w,1);
 
 % =========================================================================
 % YOUR CODE GOES HERE
@@ -29,8 +29,7 @@ normal = zeros(h, w, 3);
 %   solve scriptI * scriptV * g = scriptI * i to obtain g for this point
 %   albedo at this point is |g|
 %   normal at this point is g / |g|
-disp(h)
-disp(w)
+
 if shadow_trick == true
     for r = 1:h
         for c = 1:w
@@ -47,18 +46,21 @@ else
     for r = 1:h
         for c = 1:w
             i = reshape(image_stack(r,c,:),n,1); %B in Ax=B
-            g = mldivide(scriptV,i);
+            [g,resnorm, residual] = lsqnonneg(scriptV,i);
+            resnorms(r,c,1) = resnorm;
+            %g = mldivide(scriptV,i);
             albedo(r,c,1) = norm(g);
             normal_at_point = g / norm(g);
             normal(r,c,:) = normal_at_point;
         end 
     end 
 end 
-figure(3)
+figure(1)
 imshow(albedo)
-figure(4)
-surf(normal)
-
+figure(2)
+imshow(normal)
+figure(3)
+imshow(resnorms)
 % =========================================================================
 
 end
