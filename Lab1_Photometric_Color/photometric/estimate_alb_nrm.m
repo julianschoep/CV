@@ -59,8 +59,8 @@ figure(1)
 imshow(albedo)
 figure(2)
 imshow(normal)
-figure(3)
-imshow(resnorms)
+
+
 % =========================================================================
 
 end
