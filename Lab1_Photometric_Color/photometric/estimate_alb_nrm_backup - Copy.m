@@ -47,10 +47,6 @@ if length(size(image_stack)) == 4
     end
     albedo = albedo / channel;
     normal = normal / channel;
-    figure(1)
-    imshow(albedo)
-    figure(2)
-    imshow(normal)
 else
     if shadow_trick == true
         for r = 1:h

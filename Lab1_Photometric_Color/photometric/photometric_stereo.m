@@ -52,10 +52,11 @@ disp('Loading images...')
 image_dir = './SphereColor/';   % TODO: get the path of the script
 
 [image_stack, scriptV] = load_syn_images(image_dir, 3);
-[h, w, n, f] = size(image_stack);
-fprintf('Finish loading %dx%d images.\n\n', n, f);
+[h, w, channel, n] = size(image_stack);
+fprintf('Finish loading %dx%d images.\n\n', channel, n);
 
 [albedo, normals] = estimate_alb_nrm(image_stack, scriptV);
+
 %% Face
 [image_stack, scriptV] = load_face_images('./yaleB02/');
 [h, w, n] = size(image_stack);
