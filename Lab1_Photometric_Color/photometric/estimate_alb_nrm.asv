@@ -19,13 +19,13 @@ if length(size(image_stack)) == 4
     [h, w, channels, n] = size(image_stack);
     for r = 1:h
         for c = 1:w
-            for image = 1:n
-                colors = image_stack(r, c, :, image);
-                adj_image_stack(r, c, image) = mean(colors(:));
+            for mean = 1:n
+                colors = image_stack(r, c, :, v);
+                adj_image_stack(r, c, mean) = mean(colors(:));
             end
         end
     end
-    image_stack = adj_image_stack;
+    image_stack = adj_image_stack
 end
 
 % create arrays for 

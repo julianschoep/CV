@@ -43,20 +43,15 @@ q(isnan(q)) = 0;
 %         SE(i, j) = (p(i, j) / normals(i, j, 3) - q(i, j) / normals(i, j, 3))^2;
 %     end
 % end
-
-% Pad array with zeros
 delta_p = diff(p,1,1); % 511 x 512
 size(delta_p)
-delta_p = cat(1, zeros(1, size(delta_p, 2)), delta_p);
-size(delta_p)
-
+cat(1, zeros(size(delta_p, 2)), delta_p)
+size(
 delta_q = diff(q,1,2); % 512 x 511
 size(delta_q)
-delta_q = cat(2, zeros(size(delta_q, 1), 1), delta_q);
-size(delta_q)
+% Pad array with zeros
 
-
-SE = power(delta_p - delta_q, 2);
+SE = power(diff(p,1,1) - diff(q,1,2), 2);
 
 % ========================================================================
 
