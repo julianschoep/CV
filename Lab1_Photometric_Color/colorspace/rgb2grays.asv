@@ -1,0 +1,18 @@
+function [output_image, titles] = rgb2grays(input_image)\
+    % converts an RGB into grayscale by using 4 different methods
+    
+    titles = ["Lightness", "Average", "Luminosity", "MATLAB"]
+    % ligtness method
+    lightness = 
+    
+    % average method
+    average = 
+    
+    % luminosity method
+
+    % built-in MATLAB function 
+    matlab = rgb2gray(input_image) 
+    
+    output_image = cat(3, lightness, opp_G, opp_B);
+end
+
