@@ -38,11 +38,20 @@ q(isnan(q)) = 0;
 % approximate second derivate by neighbor difference
 % and compute the Squared Errors SE of the 2 second derivatives SE
 
-for i = 1:size(normals, 1)
-    for j = 1:size(normals, 2)
-        SE(i, j) = (p(i, j) / normals(i, j, 3) - q(i, j) / normals(i, j, 3))^2;
-    end
-end
+% for i = 1:size(normals, 1)
+%     for j = 1:size(normals, 2)
+%         SE(i, j) = (p(i, j) / normals(i, j, 3) - q(i, j) / normals(i, j, 3))^2;
+%     end
+% end
+
+% Pad array with zeros
+delta_p = diff(p, 1, 1); % 511 x 512
+delta_p = cat(1, zeros(1, size(delta_p, 2)), delta_p);
+
+delta_q = diff(q, 1, 2); % 512 x 511
+delta_q = cat(2, zeros(size(delta_q, 1), 1), delta_q);
+
+SE = power(delta_p - delta_q, 2);
 
 % ========================================================================
 

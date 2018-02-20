@@ -17,16 +17,22 @@ function [new_image] = ConvertColorSpace(input_image, colorspace)
 % convert image into double precision for conversions
 input_image = im2double(input_image);
 
+% the given code has been modified slightly to include descriptive titles
+
 if strcmp(colorspace, 'opponent')
-    new_image = rgb2opponent(input_image); % fill in this function
+    [new_image, titles] = rgb2opponent(input_image); % fill in this function
 elseif strcmp(colorspace, 'rgb')  
-    new_image = rgb2normedrgb(input_image); % fill in this function
-elseif strcmp(colorspace, 'hsv')   
+    [new_image, titles] = rgb2normedrgb(input_image); % fill in this function
+elseif strcmp(colorspace, 'hsv')
     % use the built-in function
+    new_image = rgb2hsv(input_image);
+    titles = ["Hue", "Saturation", "Value", "HSV"];
 elseif strcmp(colorspace, 'ycbcr')
     % use the built-in function
+    new_image = rgb2ycbcr(input_image);
+    titles = ["Luma (Y)", "Blue chroma (Cb)", "Red chroma (Cr)", "YCbCr"];
 elseif strcmp(colorspace, 'gray')
-    new_image = rgb2grays(input_image); % fill in this function
+    [new_image, titles] = rgb2grays(input_image); % fill in this function
 else
 % if user inputs an unknow colorspace just notify and do not plot anything
     fprintf('Error: Unknown colorspace type [%s]...\n',colorspace);
@@ -34,6 +40,6 @@ else
     return;
 end
 
-visualize(new_image); % fill in this function
+visualize(new_image, titles); % fill in this function
 
 end

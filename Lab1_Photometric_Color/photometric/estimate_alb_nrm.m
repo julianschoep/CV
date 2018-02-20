@@ -34,6 +34,7 @@ normal = zeros(h, w, 3);
 %   solve scriptI * scriptV * g = scriptI * i to obtain g for this point
 %   albedo at this point is |g|
 %   normal at this point is g / |g|
+
 avg_residuals  = 0;
 if shadow_trick == true;
     for r = 1:h;
@@ -71,6 +72,7 @@ end
 %disp('HELLOO');
 disp(avg_residuals);
 %disp('end');
+
 
 
 % =========================================================================

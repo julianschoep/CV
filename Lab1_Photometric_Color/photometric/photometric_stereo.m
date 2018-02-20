@@ -32,9 +32,9 @@ disp('Computing surface albedo and normal map...')
 disp('Integrability checking')
 [p, q, SE] = check_integrability(normals);
 
-threshold = 0.005;
+threshold = 0.005; % default is 0.005
 SE(SE <= threshold) = NaN; % for good visualization
-fprintf('Number of outliers: %d\n\n', sum(sum(SE > threshold)));
+fprintf('Number of outliers: %d out of a total of: %d\n\n.', sum(sum(SE > threshold)), numel(SE));
 
 %% compute the surface height
 height_map = construct_surface( p, q );
@@ -52,8 +52,11 @@ disp('Loading images...')
 image_dir = './SphereColor/';   % TODO: get the path of the script
 
 [image_stack, scriptV] = load_syn_images(image_dir, 3);
-[h, w, n, f] = size(image_stack);
-fprintf('Finish loading %dx%d images.\n\n', n, f);
+[h, w, channel, n] = size(image_stack);
+fprintf('Finish loading %dx%d images.\n\n', channel, n);
+
+[albedo, normals] = estimate_alb_nrm(image_stack, scriptV);
+
 %% Face
 [image_stack, scriptV] = load_face_images('./yaleB02/');
 [h, w, n] = size(image_stack);
