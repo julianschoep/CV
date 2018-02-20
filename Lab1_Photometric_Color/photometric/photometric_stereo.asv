@@ -75,7 +75,7 @@ disp('Integrability checking')
 
 threshold = 0.005;
 SE(SE <= threshold) = NaN; % for good visualization
-fprintf('Number of outliers: %d out of a total of: %d\n\n.', sum(sum(SE > threshold)), numel(SE));
+fprintf('Number of outliers: %d \n\n', sum(sum(SE > threshold)));
 
 %% compute the surface height
 height_map = construct_surface( p, q );

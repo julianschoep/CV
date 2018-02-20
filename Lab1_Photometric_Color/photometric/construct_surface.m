@@ -21,15 +21,15 @@ switch path_type
         % top left corner of height_map is zero
         % for each pixel in the left column of height_map
         %   height_value = previous_height_value + corresponding_q_value
-        for i = 2:size(height_map, 1)
+        for i = 2:h
             height_map(i, 1) = height_map(i - 1, 1) + q(i - 1, 1); % or q(i, 1)?
         end
         
         % for each row
         %   for each element of the row except for leftmost
         %       height_value = previous_height_value + corresponding_p_value
-        for i = 1:size(height_map,1)
-            for j = 2:size(height_map, 2)
+        for i = 1:h
+            for j = 2:w
                 height_map(i, j) = height_map(i, j - 1) + p(i, j - 1); % or p(i, 1)?
             end
         end
@@ -40,13 +40,13 @@ switch path_type
         
         % =================================================================
         % YOUR CODE GOES HERE
-        for i = 2:size(normals, 1)
-            height_map(1, i) = height_map(1, i - 1) + q(1, i - 1)
+        for i = 2:w
+            height_map(1, i) = height_map(1, i - 1) + p(1, i - 1);
         end
         
-        for i = 1:size(normals,2)
-            for j = 2:size(normals, 1)
-                height_map(i, i) = height_map(j - 1, i) + p(j - 1, i); % or p(i, 1)?
+        for i = 1:w
+            for j = 2:h
+                height_map(j, i) = height_map(j - 1, i) + q(j - 1, i); % or p(i, 1)?
             end
         end
 
@@ -56,10 +56,10 @@ switch path_type
         
         % =================================================================
         % YOUR CODE GOES HERE
-        height_map_column = construct_surface( p, q, 'column')
-        height_map_row = construct_surface( p, q, 'row')
+        height_map_column = construct_surface( p, q, 'column');
+        height_map_row = construct_surface( p, q, 'row');
         
-        height_map = (height_map_column + height_map_row) / 2
+        height_map = (height_map_column + height_map_row) / 2;
         
         % =================================================================
 end

@@ -36,7 +36,7 @@ for i = 1:nfiles
         image_stack(:, :, i) = im;
     end
     
-    % for RGB images
+    % for RGB images image_stack is h x w x 3 x 5
     if channel == 3
         % read input image
         im = imread(fullfile(image_dir, files(i).name));

@@ -13,7 +13,7 @@ function [ albedo, normal,avg_residuals ] = estimate_alb_nrm( image_stack, scrip
 %   avg_residuals: the average of the residuals over all <batch_size>
 %   images per point, summed up over all (x,y) points. This gives us a
 %   measure of fitness on the least squares estimate.
-disp(1)
+
 [h, w, ~] = size(image_stack);
 if ~exist('shadow_trick')
     shadow_trick = true;
