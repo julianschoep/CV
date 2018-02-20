@@ -44,28 +44,33 @@ height_map = construct_surface( p, q, 'column' );
 % 
 % show_model(albedo, height_map);
 
-%% Plot surface mesh and surface normals
+%% Plot surface normals and surface mesh
+[X, Y] = meshgrid(1:32:512, 1:32:512); 
+Z = zeros(512, 512)
 figure()
-[X_sub, Y_sub] = meshgrid(1:32:512, 1:32:512);  
-surf(X_sub, Y_sub, height_map(1:32:end, 1:32:end));
+[U, V, W] = surfnorm(X, Y, height_map(1:32:end, 1:32:end));
+U = normals(1:32:end, 1:32:end, 1);
+V = normals(1:32:end, 1:32:end, 2);
+W = normals(1:32:end, 1:32:end, 3);
+quiver3(X, Y, Z(1:32:end, 1:32:end), U, V, W, 0.5);
+axis([0 512 0 512 0 max(max(height_map))])
+xlabel('x'),ylabel('y'),zlabel('z');
+title('Surface Normals');
+
+figure()
+surf(X, Y, height_map(1:32:end, 1:32:end));
+axis([0 512 0 512 0 max(max(height_map))])
 xlabel('x'),ylabel('y'),zlabel('z');
 title('Surface Mesh');
-axis([0 512 0 512 0 max(max(height_map))])
-
-figure()
-[U, V, W] = surfnorm(X_sub, Y_sub, height_map(1:32:end, 1:32:end));
-quiver3(X_sub, Y_sub, height_map(1:32:end, 1:32:end), U, V, W, 0.5);
-xlabel('x'),ylabel('y'),zlabel('z');
-title('Surface normals');
-axis([0 512 0 512 0 max(max(height_map))])
-
 %% Display
 show_results(albedo, normals, SE);
 show_model(albedo, height_map);
 
 %% Attempt at quiver plot (can't figure out how to subsample)
 figure(1)
-quiver3(zeros(size(height_map)), normals(:, :, 1), normals(:, :, 2), normals(:, :, 3))
+Z = zeros(size(height_map))
+axis([0 512 0 512 0 max(max(height_map))])
+quiver3(Z(1:32:end, 1:32:end, :) , normals(1:32:end, 1:32:end, 1), normals(1:32:end, 1:32:end, 2), normals(1:32:end, 1:32:end, 3))
 
 %% Load RGB Images
 disp('Loading images...')
