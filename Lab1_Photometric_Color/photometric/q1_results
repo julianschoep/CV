@@ -1,0 +1,9 @@
+function = get_results_q1()
+
+res_lengths = zeros(1,20)
+for i = 1:20
+    [alb,norm,res] = estimate_alb_nrm(image_stack, scriptV, (i+5));
+    res_lengths(i) = res;
+end
+
+end
