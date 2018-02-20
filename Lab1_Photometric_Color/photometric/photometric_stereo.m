@@ -44,6 +44,21 @@ height_map = construct_surface( p, q, 'column' );
 % 
 % show_model(albedo, height_map);
 
+%% Plot surface mesh and surface normals
+figure()
+[X_sub, Y_sub] = meshgrid(1:32:512, 1:32:512);  
+surf(X_sub, Y_sub, height_map(1:32:end, 1:32:end));
+xlabel('x'),ylabel('y'),zlabel('z');
+title('Surface Mesh');
+axis([0 512 0 512 0 max(max(height_map))])
+
+figure()
+[U, V, W] = surfnorm(X_sub, Y_sub, height_map(1:32:end, 1:32:end));
+quiver3(X_sub, Y_sub, height_map(1:32:end, 1:32:end), U, V, W, 0.5);
+xlabel('x'),ylabel('y'),zlabel('z');
+title('Surface normals');
+axis([0 512 0 512 0 max(max(height_map))])
+
 %% Display
 show_results(albedo, normals, SE);
 show_model(albedo, height_map);
