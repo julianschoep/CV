@@ -1,4 +1,4 @@
-function [ image_stack, scriptV ] = load_syn_images( image_dir, channel )
+function [ image_stack, scriptV, V ] = load_syn_images( image_dir, channel )
 %LOAD_SYN_IMAGES read from directory image_dir all files with extension png
 %   image_dir: path to the image directory
 %   nchannel: the image channel to be loaded, default = 1
@@ -59,7 +59,7 @@ for i = 1:nfiles
     X = str2double(name(1:m));
     n = strfind(name,'.png')-1;
     Y = str2double(name(m+2:n));
-    V(i, :) = [X, Y, Z];
+    V(i, :) = [-X, Y, Z];
 end
 
 % normalization
@@ -69,6 +69,6 @@ image_stack = (double(image_stack) - min_val) / (max_val - min_val);
 
 normV = sqrt(sum(V.^2, 2));
 scriptV = bsxfun(@rdivide, V, normV);
-disp(V)
+%disp(V);
 end
 
