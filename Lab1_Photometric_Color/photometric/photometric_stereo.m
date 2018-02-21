@@ -19,7 +19,7 @@ image_dir = './SphereGray25/';   % TODO: get the path of the script
 %image_dir = './MonkeyGray/';   % TODO: get the path of the script
 
 %%
-[image_stack, scriptV] = load_syn_images(image_dir);
+[image_stack, scriptV] = load_syn_images(image_dir,3);
 [h, w, n] = size(image_stack);
 fprintf('Finish loading %d images.\n\n', n);
 
@@ -38,21 +38,22 @@ fprintf('Number of outliers: %d out of a total of: %d\n\n.', sum(sum(SE > thresh
 
 %% compute the surface height
 
-height_map = construct_surface( p, q, 'column' );
-% height_map_column = construct_surface( p, q, 'row');
-% height_map_average = construct_surface( p, q, 'average');
+height_map_column = construct_surface( p, q, 'column' );
+height_map_row = construct_surface( p, q, 'row');
+height_map_average = construct_surface( p, q, 'average');
 % 
-% show_model(albedo, height_map);
 
+%figure(1)
+%show_model(normals, height_map_column);
+%figure(2)
+show_model(normals, height_map_row);
+%figure(3)
+%show_model(normals, height_map_average);
 %% Plot surface normals and surface mesh
 [X, Y] = meshgrid(1:32:512, 1:32:512); 
-Z = zeros(512, 512)
 figure()
 [U, V, W] = surfnorm(X, Y, height_map(1:32:end, 1:32:end));
-U = normals(1:32:end, 1:32:end, 1);
-V = normals(1:32:end, 1:32:end, 2);
-W = normals(1:32:end, 1:32:end, 3);
-quiver3(X, Y, Z(1:32:end, 1:32:end), U, V, W, 0.5);
+quiver3(X, Y, height_map(1:32:end, 1:32:end), U, V, W, 0.5);
 axis([0 512 0 512 0 max(max(height_map))])
 xlabel('x'),ylabel('y'),zlabel('z');
 title('Surface Normals');
