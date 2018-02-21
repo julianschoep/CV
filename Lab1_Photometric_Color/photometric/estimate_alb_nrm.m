@@ -79,7 +79,7 @@ end
 %figure('NumberTitle','off','Name','Normal SphereGray5 Shadowtrick')
 %imshow(normal);
 %disp('HELLOO');
-disp(avg_residuals);
+avg_residuals = avg_residuals / (h*w);
 %disp('end');
 
 
