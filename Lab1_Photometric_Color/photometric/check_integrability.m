@@ -45,13 +45,16 @@ q(isnan(q)) = 0;
 % end
 
 % Pad array with zeros
-delta_p = diff(p, 1, 1); % 511 x 512
-delta_p = cat(1, zeros(1, size(delta_p, 2)), delta_p);
+% delta_p = diff(p, 1, 1); % 511 x 512
+% delta_p = cat(1, zeros(1, size(delta_p, 2)), delta_p);
+% 
+% delta_q = diff(q, 1, 2); % 512 x 511
+% delta_q = cat(2, zeros(size(delta_q, 1), 1), delta_q);
 
-delta_q = diff(q, 1, 2); % 512 x 511
-delta_q = cat(2, zeros(size(delta_q, 1), 1), delta_q);
+[dpdx, dpdy] = gradient(p);
+[dqdx, dqdy] = gradient(q);
 
-SE = power(delta_p - delta_q, 2);
+SE = (dpdy - dqdx).^2;
 
 % ========================================================================
 
