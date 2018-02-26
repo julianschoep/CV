@@ -8,18 +8,17 @@ disp('Part 1: Photometric Stereo')
 % obtain many images in a fixed view under different illumination
 disp('Loading images...')
 image_dir = './SphereGray5/';   % TODO: get the path of the script
-% image_ext = '*.png';
 
 %%
 disp('Loading images...')
 image_dir = './SphereGray25/';   % TODO: get the path of the script
 
 %%
-%disp('Loading images...')
-%image_dir = './MonkeyGray/';   % TODO: get the path of the script
+% %disp('Loading images...')
+% %image_dir = './MonkeyGray/';   % TODO: get the path of the script
 
 %%
-[image_stack, scriptV] = load_syn_images(image_dir,3);
+[image_stack, scriptV] = load_syn_images(image_dir);
 [h, w, n] = size(image_stack);
 fprintf('Finish loading %d images.\n\n', n);
 
@@ -37,7 +36,7 @@ SE(SE <= threshold) = NaN; % for good visualization
 fprintf('Number of outliers: %d out of a total of: %d\n\n.', sum(sum(SE > threshold)), numel(SE));
 
 %% compute the surface height
-
+height_map = construct_surface( p, q );
 height_map_column = construct_surface( p, q, 'column' );
 height_map_row = construct_surface( p, q, 'row');
 height_map_average = construct_surface( p, q, 'average');
@@ -49,25 +48,11 @@ height_map_average = construct_surface( p, q, 'average');
 show_model(normals, height_map_row);
 %figure(3)
 %show_model(normals, height_map_average);
-%% Plot surface normals and surface mesh
-[X, Y] = meshgrid(1:32:512, 1:32:512); 
-figure()
-[U, V, W] = surfnorm(X, Y, height_map(1:32:end, 1:32:end));
-quiver3(X, Y, height_map(1:32:end, 1:32:end), U, V, W, 0.5);
-axis([0 512 0 512 0 max(max(height_map))])
-xlabel('x'),ylabel('y'),zlabel('z');
-title('Surface Normals');
-
-figure()
-surf(X, Y, height_map(1:32:end, 1:32:end));
-axis([0 512 0 512 0 max(max(height_map))])
-xlabel('x'),ylabel('y'),zlabel('z');
-title('Surface Mesh');
 %% Display
 show_results(albedo, normals, SE);
 show_model(albedo, height_map);
 
-%% Attempt at quiver plot (can't figure out how to subsample)
+%% Quiver plot
 figure(1)
 Z = zeros(size(height_map))
 axis([0 512 0 512 0 max(max(height_map))])
