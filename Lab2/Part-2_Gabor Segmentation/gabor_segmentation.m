@@ -135,6 +135,8 @@ featureMaps = cell(length(gaborFilterBank),1);
 for jj = 1 : length(gaborFilterBank)
     real = gaborFilterBank(jj).filterPairs(:,:,1);
     imaginary = gaborFilterBank(jj).filterPairs(:,:,2);
+    % I chose symmetric padding because I think it is the best
+    % approximation for patterns and textures as padding.
     real_out = imfilter(img_gray, real, 'symmetric'); % \\TODO: filter the grayscale input with real part of the Gabor
     imag_out = imfilter(img_gray, imaginary, 'symmetric'); % \\TODO: filter the grayscale input with imaginary part of the Gabor
     featureMaps{jj} = cat(3, real_out, imag_out);
@@ -160,7 +162,8 @@ featureMags =  cell(length(gaborFilterBank),1);
 for jj = 1:length(featureMaps)
     real_part = featureMaps{jj}(:,:,1);
     imag_part = featureMaps{jj}(:,:,2);
-    featureMags{jj} = abs(real_part + imag_part)% \\TODO: Compute the magnitude here
+    
+    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2)% \\TODO: Compute the magnitude here
     
     % Visualize the magnitude response if you wish.
     if visFlag
@@ -191,8 +194,9 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for i = 1:length(featureMags)
-        smoothfeatureMags{i} = imgaussfilt(featureMags{i}, 'Padding', "symmetric"); % What is appropriate Gaussian, we can add a sigma value
-        features(:,:,jj) = smoothfeatureMags{i};
+        % What is appropriate Gaussian here, we can add a sigma value
+        featureMags{i} = imgaussfilt(featureMags{i}, 'Padding', "symmetric");
+        features(:,:,jj) = featureMags{i};
     end
 else
     % Don't smooth but just insert magnitude images into the matrix
@@ -201,7 +205,7 @@ else
         features(:,:,jj) = featureMags{jj};
     end
 end
-
+%%
 
 % Reshape the filter outputs (i.e. tensor called features) of size 
 % [numRows, numCols, numFilters] into a matrix of size [numRows*numCols, numFilters]
@@ -209,14 +213,16 @@ end
 % input image with numFilters features.  
 features = reshape(features, numRows * numCols, []);
 
-
 % Standardize features. 
 % \\ Hint: see http://ufldl.stanford.edu/wiki/index.php/Data_Preprocessing
 %          for more information. \\
 
 % features = % \\ TODO: i)  Implement standardization on matrix called features. 
-           %          ii) Return the standardized data matrix.
+%                     ii) Return the standardized data matrix.
+sum(features)
+size(features)
 
+% features = (features - repmat(mean(features), size(features ,1), 1)) ./ repmat(var(features), size(features,1), 1);
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
