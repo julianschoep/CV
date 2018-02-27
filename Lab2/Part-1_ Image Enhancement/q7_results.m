@@ -25,47 +25,20 @@ for i = 1:2
 end
 
 sigma = [0.5 1.0 2.0];
-kernel_size = 3
+kernel_size = [3 5 7];
 
 "Gaussian"
 plot = 1;
 figure(3)
 for j = 1:3
-        approx = denoise(gauss_noise, "Gaussian", kernel_size, sigma(j));
-        subplot(1, 3, plot)
+    for k = 1:3
+        approx = denoise(gauss_noise, "Gaussian", kernel_size(k), sigma(j));
+        subplot(3, 3, plot)
         imshow(approx);
-        str = sprintf('Sigma %d of size %dx%d', sigma(j), kernel_size, kernel_size);
+        str = sprintf('Sigma %d of size %dx%d', sigma(j), kernel_size(k), kernel_size(k));
         title(str);
         plot = plot + 1;
         PSNR = myPSNR(approx, orig); 
-        fprintf('PSNR = %d with sigma %d of size %dx%d\n', PSNR, sigma(j), kernel_size, kernel_size);
+        fprintf('PSNR = %d with sigma %d of size %dx%d\n', PSNR, sigma(j), kernel_size(k), kernel_size(k));
+    end
 end
-
-figure(4)
-
-approx = denoise(gauss_noise, "Median", 3);
-PSNR = myPSNR(approx, orig);
-subplot(1, 3, 1)
-imshow(approx);
-str = sprintf('Median filter with a PSNR of %d', PSNR);
-title(str);
-
-approx = denoise(gauss_noise, "Box", 3);
-PSNR = myPSNR(approx, orig);
-subplot(1, 3, 2)
-imshow(approx);
-str = sprintf('Median filter with a PSNR of %d', PSNR);
-title(str);
-
-
-approx = denoise(gauss_noise, "Gaussian", 3, 2);
-PSNR = myPSNR(approx, orig);
-subplot(1, 3, 3)
-imshow(approx);
-str = sprintf('Gaussian filter with a PSNR of %d', PSNR);
-title(str);
-
-        
-        
-
-
