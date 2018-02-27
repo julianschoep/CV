@@ -191,7 +191,7 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for i = 1:length(featureMags)
-        smoothfeatureMags{i} = imgaussfilt(featureMags{i}, 'Padding', "symmetric"); % What is appropriate Gaussian, we can add a sigma value
+        smoothfeatureMags{i};
         features(:,:,jj) = smoothfeatureMags{i};
     end
 else
