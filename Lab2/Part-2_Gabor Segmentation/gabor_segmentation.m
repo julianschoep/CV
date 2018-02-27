@@ -9,7 +9,7 @@ image_id = 'Kobi'; % Identifier to switch between input images.
 err_msg  = 'Image not available.';
 
 % Control settings
-visFlag       = true;    %  Set to true to visualize filter responses.
+visFlag       = false;    %  Set to true to visualize filter responses.
 smoothingFlag = true;   %  Set to true to postprocess filter outputs.
 
 %% Read image
@@ -163,7 +163,7 @@ for jj = 1:length(featureMaps)
     real_part = featureMaps{jj}(:,:,1);
     imag_part = featureMaps{jj}(:,:,2);
     
-    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2)% \\TODO: Compute the magnitude here
+    featureMags{jj} = sqrt(double(real_part.^2 + imag_part.^2))% \\TODO: Compute the magnitude here
     
     % Visualize the magnitude response if you wish.
     if visFlag
@@ -195,6 +195,7 @@ if smoothingFlag
     %END_FOR
     for i = 1:length(featureMags)
         % What is appropriate Gaussian here, we can add a sigma value
+        % (probably trial and error)
         featureMags{i} = imgaussfilt(featureMags{i}, 'Padding', "symmetric");
         features(:,:,jj) = featureMags{i};
     end
@@ -219,10 +220,14 @@ features = reshape(features, numRows * numCols, []);
 
 % features = % \\ TODO: i)  Implement standardization on matrix called features. 
 %                     ii) Return the standardized data matrix.
-sum(features)
-size(features)
+% sum(features) % all columns except the last are 0.
+% size(features)
+% std(features)
+features = (features - mean(features)) / std(features) % Only gives NaNs
 
-% features = (features - repmat(mean(features), size(features ,1), 1)) ./ repmat(var(features), size(features,1), 1);
+% Some standardization implementation I got off the internet, also only
+% gives NaNs.
+%features = (features - repmat(mean(features), size(features ,1), 1)) ./ repmat(var(features), size(features,1), 1);
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
