@@ -13,7 +13,7 @@ i=0
 for sigma= [1,5,10]
             i = i + 1;
             
-            [gaborComplex, gaborTitle] = createGabor(sigma, (pi/3), 15, 0, 1);
+            [gaborComplex, gaborTitle] = createGabor(sigma, 0, 15, 0, 1);
             gaborReal = gaborComplex(:,:,1);
             gaborImaginary = gaborComplex(:,:,2);
             subplot(3,6,i), imshow(gaborReal,[]);
@@ -22,24 +22,28 @@ for sigma= [1,5,10]
             subplot(3,6,i), imshow(gaborImaginary, []);
             
 end
-for theta=[0,(pi/4),(pi/8)]
+for theta=[0,(pi/4),(pi/2)]
     i = i + 1;
     [gaborComplex, gaborTitle] = createGabor(sigma, theta, 15, 0, 1);
     gaborReal = gaborComplex(:,:,1);
     gaborImaginary = gaborComplex(:,:,2);
     subplot(3,6,i), imshow(gaborReal,[]);
     i = i + 1;
-    title(['\sigma: ', num2str(sigma), ', \theta: ', num2str(theta), ', \gamma: ',num2str(1)])
+    if theta == 0 
+        title(['\sigma: ', num2str(sigma), ', \theta: 0, \gamma: ',num2str(1)])
+    else
+        title(['\sigma: ', num2str(sigma), ', \theta: 1/', num2str(pi/theta), '\pi, \gamma: ',num2str(1)])
+    end
     subplot(3,6,i), imshow(gaborImaginary, []);
 end
 
-for gamma=[1,2,3]
+for gamma=[0.5,1,2]
     i = i + 1;
-    [gaborComplex, gaborTitle] = createGabor(sigma, theta, 15, 0, gamma);
+    [gaborComplex, gaborTitle] = createGabor(sigma, 0, 15, 0, gamma);
     gaborReal = gaborComplex(:,:,1);
     gaborImaginary = gaborComplex(:,:,2);
     subplot(3,6,i), imshow(gaborReal,[]);
     i = i + 1;
-    title(['\sigma: ', num2str(sigma), ', \theta: ', num2str(theta), ', \gamma: ',num2str(gamma)])
+    title(['\sigma: ', num2str(sigma), ', \theta: ', num2str(0), ', \gamma: ',num2str(gamma)])
     subplot(3,6,i), imshow(gaborImaginary, []);
 end
