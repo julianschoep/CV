@@ -1,0 +1,12 @@
+function [Gx, Gy, im_magnitude,im_direction] = compute_gradient(image)
+GxKernel = [1,0,-1;2,0,-2;1,0,-1];
+GyKernel = [1,2,1;0,0,0;-1,-2,-1];
+Gx = imfilter(image,GxKernel, 'conv','replicate');
+Gy = imfilter(image,GyKernel, 'conv', 'replicate');
+[w, h,d] = size(image);
+im_magnitude = zeros(w,h);
+for r = 1:h
+    for c = 1:w
+        im_magnitude(r,c) = sqrt((Gx(r,c)
+end
+
