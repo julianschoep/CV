@@ -1,0 +1,42 @@
+function plot_gabor_filters()
+%[gabor filter, filter_title] = createGabor( sigma, theta, lambda, psi, gamma )
+% We have to visualize theta, sigma and gamma
+%   - ARGUMENTS
+%     sigma      Standard deviation of Gaussian envelope.
+%     theta      Orientation of the Gaussian envelope. Takes arguments in
+%                the range [0, pi/2).
+%     lambda     The wavelength for the carriers. The central frequency 
+%                (w_c) of the carrier signals.
+%     psi        Phase offset for the carrier signal, sin(w_c . t + psi).
+%     gamma      Controls the aspect ratio of the Gaussian envelope
+subplot_index=0
+for sigma= [0.1,1,10]
+            subplot_index = subplot_index + 1;
+            
+            [gaborComplex, gaborTitle] = createGabor(sigma, 0, 2, 0, 1);
+            gaborReal = gaborComplex(:,:,1);
+            gaborImaginary = gaborComplex(:,:,2);
+            subplot(3,6,1), imshow(gaborReal,[]);
+            title(gaborTitle)
+            subplot(9,4,), imshow(gaborImaginary, []);
+            
+end
+for theta=[0,pi/8,pi/4]
+    subplot_index = subplot_index + 1;
+    [gaborComplex, gaborTitle] = createGabor(sigma, theta, 2, 0, gamma);
+    gaborReal = gaborComplex(:,:,1);
+    gaborImaginary = gaborComplex(:,:,2);
+    subplot(9,3,1), imshow(gaborReal,[]);
+    title(gaborTitle)
+    subplot(9,4,), imshow(gaborImaginary, []);
+end
+
+for gamma=[0.5,1,2]
+    subplot_index = subplot_index + 1;
+    [gaborComplex, gaborTitle] = createGabor(sigma, theta, 2, 0, gamma);
+    gaborReal = gaborComplex(:,:,1);
+    gaborImaginary = gaborComplex(:,:,2);
+    subplot(9,3,1), imshow(gaborReal,[]);
+    title(gaborTitle)
+    subplot(9,4,), imshow(gaborImaginary, []);
+end
