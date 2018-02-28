@@ -200,7 +200,7 @@ if smoothingFlag
         
         %*** Piazza said, use sigma corresponding to the gabor filter sigma,
         % maybe like this?
-        sigma = 11
+        sigma = gaborFilterBank(i).sigma * 11;
         smoothed = imgaussfilt(featureMags{i}, sigma, "Padding", "symmetric");
         features(:,:,i) = smoothed;
     end
@@ -226,7 +226,6 @@ features = reshape(features, numRows * numCols, []);
 %                     ii) Return the standardized data matrix.
 zero_mean_features = features - mean(features);
 features = zero_mean_features ./ std(features);
-std(features)
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
