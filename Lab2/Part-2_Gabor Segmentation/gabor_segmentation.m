@@ -41,7 +41,6 @@ end
 % Image adjustments
 img      = imresize(img,resize_factor);
 img_gray = rgb2gray(img);
-img_gray = im2double(img_gray); % Perhaps convert to doubles
 
 % Display image
 figure(1), imshow(img), title(sprintf('Input image: %s', image_id));
@@ -161,11 +160,11 @@ end
 % \\ Hint: (real_part^2 + imaginary_part^2)^(1/2) \\
 featureMags =  cell(length(gaborFilterBank),1);
 for jj = 1:length(featureMaps)
-    real_part = featureMaps{jj}(:,:,1);
-    imag_part = featureMaps{jj}(:,:,2);
+    real_part = double(featureMaps{jj}(:,:,1));
+    imag_part = double(featureMaps{jj}(:,:,2));
     
     % Added a double conversion because cannot use sqrt or power on uint8
-    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2)% \\TODO: Compute the magnitude here
+    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2) % \\TODO: Compute the magnitude here
     
     % Visualize the magnitude response if you wish.
     if visFlag
@@ -201,7 +200,7 @@ if smoothingFlag
         
         %*** Piazza said, use sigma corresponding to the gabor filter sigma,
         % maybe like this?
-        sigma = gaborFilterBank(i).sigma;
+        sigma = 11
         smoothed = imgaussfilt(featureMags{i}, sigma, "Padding", "symmetric");
         features(:,:,i) = smoothed;
     end
@@ -226,7 +225,8 @@ features = reshape(features, numRows * numCols, []);
 % features = % \\ TODO: i)  Implement standardization on matrix called features. 
 %                     ii) Return the standardized data matrix.
 zero_mean_features = features - mean(features);
-features = zero_mean_features ./ std(zero_mean_features);
+features = zero_mean_features ./ std(features);
+std(features)
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
