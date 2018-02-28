@@ -41,6 +41,7 @@ end
 % Image adjustments
 img      = imresize(img,resize_factor);
 img_gray = rgb2gray(img);
+img_gray = im2double(img_gray); % Perhaps convert to doubles
 
 % Display image
 figure(1), imshow(img), title(sprintf('Input image: %s', image_id));
@@ -135,8 +136,8 @@ featureMaps = cell(length(gaborFilterBank),1);
 for jj = 1 : length(gaborFilterBank)
     real = gaborFilterBank(jj).filterPairs(:,:,1);
     imaginary = gaborFilterBank(jj).filterPairs(:,:,2);
-    % I chose symmetric padding because I think it is the best
-    % approximation for patterns and textures as padding.
+    %*** Using symmetric padding, because it provides the best
+    % approximation of continued patterns.
     real_out = imfilter(img_gray, real, 'symmetric'); % \\TODO: filter the grayscale input with real part of the Gabor
     imag_out = imfilter(img_gray, imaginary, 'symmetric'); % \\TODO: filter the grayscale input with imaginary part of the Gabor
     featureMaps{jj} = cat(3, real_out, imag_out);
@@ -163,7 +164,8 @@ for jj = 1:length(featureMaps)
     real_part = featureMaps{jj}(:,:,1);
     imag_part = featureMaps{jj}(:,:,2);
     
-    featureMags{jj} = sqrt(double(real_part.^2 + imag_part.^2))% \\TODO: Compute the magnitude here
+    % Added a double conversion because cannot use sqrt or power on uint8
+    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2)% \\TODO: Compute the magnitude here
     
     % Visualize the magnitude response if you wish.
     if visFlag
@@ -194,10 +196,14 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for i = 1:length(featureMags)
-        % What is appropriate Gaussian here, we can add a sigma value
-        % (probably trial and error)
-        featureMags{i} = imgaussfilt(featureMags{i}, 'Padding', "symmetric");
-        features(:,:,jj) = featureMags{i};
+        %*** What is appropriate Gaussian here, we can add a sigma value
+        % No idea what is good (probably trial and error), default is 0.5
+        
+        %*** Piazza said, use sigma corresponding to the gabor filter sigma,
+        % maybe like this?
+        sigma = gaborFilterBank(i).sigma;
+        smoothed = imgaussfilt(featureMags{i}, sigma, "Padding", "symmetric");
+        features(:,:,i) = smoothed;
     end
 else
     % Don't smooth but just insert magnitude images into the matrix
@@ -206,7 +212,6 @@ else
         features(:,:,jj) = featureMags{jj};
     end
 end
-%%
 
 % Reshape the filter outputs (i.e. tensor called features) of size 
 % [numRows, numCols, numFilters] into a matrix of size [numRows*numCols, numFilters]
@@ -220,14 +225,8 @@ features = reshape(features, numRows * numCols, []);
 
 % features = % \\ TODO: i)  Implement standardization on matrix called features. 
 %                     ii) Return the standardized data matrix.
-% sum(features) % all columns except the last are 0.
-% size(features)
-% std(features)
-features = (features - mean(features)) / std(features) % Only gives NaNs
-
-% Some standardization implementation I got off the internet, also only
-% gives NaNs.
-%features = (features - repmat(mean(features), size(features ,1), 1)) ./ repmat(var(features), size(features,1), 1);
+zero_mean_features = features - mean(features);
+features = zero_mean_features ./ std(zero_mean_features);
 
 % (Optional) Visualize the saliency map using the first principal component 
 % of the features matrix. It will be useful to diagnose possible problems 
@@ -245,10 +244,10 @@ imshow(feature2DImage,[]), title('Pixel representation projected onto first PC')
 %            MATLAB's built-in kmeans function.
 tic
 % pixLabels = % \\TODO: Return cluster labels per pixel
+pixLabels = kmeans(features, k);
+
 ctime = toc;
 fprintf('Clustering completed in %.3f seconds.\n', ctime);
-
-
 
 % Visualize the clustering by reshaping pixLabels into original grayscale
 % input size [numRows numCols].

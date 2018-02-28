@@ -1,3 +1,5 @@
+% Script that generates all results used for the answers of question 7.
+
 % Load images, convert to double precision
 gauss_noise = im2double(imread('images\image1_gaussian.jpg'));
 sp_noise = im2double(imread('images\image1_saltpepper.jpg'));
