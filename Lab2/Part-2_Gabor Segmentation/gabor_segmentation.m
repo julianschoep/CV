@@ -4,7 +4,6 @@ k        = 2;      % number of clusters in k-means algorithm. By default,
 image_id = 'SciencePark'; % Identifier to switch between input images.
                    % Possible ids: 'Kobi',    'Polar', 'Robin-1'
                    %               'Robin-2', 'Cows'
-
 % Misc
 err_msg  = 'Image not available.';
 
@@ -139,7 +138,7 @@ featureMaps = cell(length(gaborFilterBank),1);
 for jj = 1 : length(gaborFilterBank)
     real = gaborFilterBank(jj).filterPairs(:,:,1);
     imaginary = gaborFilterBank(jj).filterPairs(:,:,2);
-    %*** Using symmetric padding, because it provides the best
+    % Using symmetric padding, because it provides the best
     % approximation of continued patterns.
     real_out = imfilter(img_gray, real, 'symmetric','conv'); % \\TODO: filter the grayscale input with real part of the Gabor
     imag_out = imfilter(img_gray, imaginary, 'symmetric','conv'); % \\TODO: filter the grayscale input with imaginary part of the Gabor
@@ -165,15 +164,12 @@ end
 featureMags =  cell(length(gaborFilterBank),1);
 
 for jj = 1:length(featureMaps)
-    real_part = featureMaps{jj}(:,:,1);
-    imag_part = featureMaps{jj}(:,:,2);
-    if jj == 15
-        disp('HEEEEEEEEEEEEEEEEEEEEEEEE')
-        disp(real_part);
-        pause(2);
-    end
-    % Added a double conversion because cannot use sqrt or power on uint8
-    featureMags{jj} = (double(real_part).^2 + double(imag_part).^2).^(.5) % \\TODO: Compute the magnitude here
+    % Convert to double to be able to use sqrt or power function.
+    real_part = double(featureMaps{jj}(:,:,1)); 
+    imag_part = double(featureMaps{jj}(:,:,2));
+    
+    featureMags{jj} = sqrt(real_part.^2 + imag_part.^2) % \\TODO: Compute the magnitude here
+
     
     % Visualize the magnitude response if you wish.
     if visFlag
@@ -204,14 +200,11 @@ if smoothingFlag
         % ii) insert the smoothed image into features(:,:,jj)
     %END_FOR
     for i = 1:length(featureMags)
-        %*** What is appropriate Gaussian here, we can add a sigma value
-        % No idea what is good (probably trial and error), default is 0.5
         
-        %*** Piazza said, use sigma corresponding to the gabor filter sigma,
-        % maybe like this?
-        sigma = gaborFilterBank(i).sigma *11;
-        smoothed = imgaussfilt(featureMags{i}, sigma, "Padding", "symmetric","FilterDomain",'spatial');
-        %smoothed = imfilter(featureMags{i},fspecial('gaussian',(1*ceil(2*sigma)+1),sigma),'symmetric','same','conv');
+        % Sigma fine-tuned for kobi image, dependency on sigma of each
+        % Gaussian envelope appeared to work slightly better.
+        sigma = gaborFilterBank(i).sigma * 11;
+        smoothed = imgaussfilt(featureMags{i}, sigma, "Padding", "symmetric");
         features(:,:,i) = smoothed;
     end
 else
