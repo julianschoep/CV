@@ -12,14 +12,14 @@ switch LOG_type
     case 2
         %method 2: Convolving the image directly with a LoG kernel (kernel size of 5
         %    and standard deviation of 0.5).
-        LoG_kernel = fspecial('log',5,0.5);
+        LoG_kernel = fspecial('log',9,0.5);
         imOut = imfilter(image,LoG_kernel, 'replicate','same','conv');
     case 3
         %method 3: Taking the Difference of two Gaussians (DoG) computed at different
         %    scales σ 1 and σ 2 .
-        gauss_kernel_1 = fspecial('gaussian',5,sigma_1);
+        gauss_kernel_1 = fspecial('gaussian',7,sigma_1);
         %im1 = imfilter(image,gauss_kernel_1, 'replicate','same','conv');
-        gauss_kernel_2 = fspecial('gaussian',5,sigma_2);
+        gauss_kernel_2 = fspecial('gaussian',7,sigma_2);
         %im2 = imfilter(image,gauss_kernel_2, 'replicate','same','conv');
         DoG_kernel = gauss_kernel_1 - gauss_kernel_2;
         imOut = imfilter(image,DoG_kernel, 'replicate','same','conv');
