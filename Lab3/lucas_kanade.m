@@ -33,7 +33,7 @@ function plot_optical_flow(original_image, moved_image, region_size)
     % Image wide to reduce the impact of derivative padding.
     [dx, dy] = gradient(original_image);
     dt = moved_image - original_image;
-
+    
     % Divide images and derivatives in regions.
     regions_original = divide_in_regions(original_image, 15);
     regions_moved = divide_in_regions(moved_image, 15);
