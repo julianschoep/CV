@@ -73,7 +73,7 @@ function plot_optical_flow_corners(original_image, moved_image, region_size, r, 
     % Image wide to reduce the impact of derivative padding.
     
     % The center pixel offset of the region borders.
-    pixel = round(ww/2)
+    pixel = round(region_size/2)
     
     % Discard corners that are too close to the edge for the region size.
     j = 1
