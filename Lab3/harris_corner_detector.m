@@ -45,7 +45,7 @@ function [ H, r, c ] = harris_corner_detector( image, k,sigma,n,thresh )
                     end
                 end
                 if is_max;
-                    corners = cat(1,corners,[c,r]);
+                    corners = cat(1,corners,[c-d,r-d]);
                 end
             end
     
@@ -54,10 +54,10 @@ function [ H, r, c ] = harris_corner_detector( image, k,sigma,n,thresh )
     r = corners(:,2);
     c = corners(:,1);
     figure(1)
-    subplot('Position',[36 13 1 1]);imshow(Ix);title("Ix")
-    %subplot(1,3,2);imshow(Iy);title("Iy")
-    %subplot(1,3,3);;imshow(image);title("Detected corners");
-    %suptitle(['\sigma: ', num2str(sigma), ', kernel size: ', num2str(k), ', max window size: ',num2str(n), ', threshold: ',num2str(thresh)])
+    subplot(1,3,1);imshow(Ix);title("Ix")
+    subplot(1,3,2);imshow(Iy);title("Iy")
+    subplot(1,3,3);imshow(image);title("Detected corners");
+    suptitle(['\sigma: ', num2str(sigma), ', kernel size: ', num2str(k), ', max window size: ',num2str(n), ', threshold: ',num2str(thresh)])
     hold on; scatter(corners(:,1),corners(:,2),15,'red');
-    
+    hold off;
 end
