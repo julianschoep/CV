@@ -31,7 +31,6 @@ end
 function plot_optical_flow_image(original_image, moved_image, region_size)
     % Compute image wide spatial and temporal derivatives.
     % Image wide to reduce the impact of derivative padding.
-
     [Ix, Iy] = gradient(original_image);
     It = moved_image - original_image;
 
