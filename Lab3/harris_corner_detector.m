@@ -36,11 +36,7 @@ function [ H, r, c ] = harris_corner_detector( image, k,sigma,n,thresh )
             if H_pad(r,c) > thresh;
                 % iterate over nxn window
                 is_max = true;
-                disp("r");
-                disp(r);
                 for ri = r-d:r+d;
-                    disp("ri");
-                    disp(ri);
                     for ci = c-d:c+d;
                         
                         if H_pad(r,c) < H_pad(ri,ci);

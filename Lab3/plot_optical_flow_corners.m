@@ -1,10 +1,10 @@
 % Optical flow through Lucas-Kanade for detected corners (Section 3).
-function plot_optical_flow_corners(original_image, moved_image, region_size, r, c)
+function [r,c,v1,v2] = plot_optical_flow_corners(original_image, moved_image, region_size, r, c)
     % Compute image wide spatial and temporal derivatives.
     % Image wide to reduce the impact of derivative padding.
     
     % The center pixel offset of the region borders.
-    pixel = round(region_size/2);
+    pixel = floor(region_size/2);
     
     % Discard corners that are too close to the edge for the region size.
     j = 1;

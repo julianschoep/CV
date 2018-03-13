@@ -69,7 +69,7 @@ function plot_optical_flow_image(original_image, moved_image, region_size)
 end
 
 % Optical flow through Lucas-Kanade for detected corners (Section 3).
-function plot_optical_flow_corners(original_image, moved_image, region_size, r, c)
+function [r,c] =  plot_optical_flow_corners(original_image, moved_image, region_size, r, c)
     % Compute image wide spatial and temporal derivatives.
     % Image wide to reduce the impact of derivative padding.
     
