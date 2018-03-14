@@ -18,9 +18,16 @@ demo_mosaic;
 % Find matches between two given images, the images have to be in
 % grayscale
 
-im1 = rgb2gray(imread('nachtwacht1.jpg'));
-im2 = rgb2gray(imread('nachtwacht2.jpg'));
+% im1 = rgb2gray(imread('nachtwacht1.jpg'));
+% im2 = rgb2gray(imread('nachtwacht2.jpg'));
 
+% im1 = imread('boat1.pgm');
+% im2 = imread('boat2.pgm');
+
+im2 = rgb2gray(imread('left.jpg'));
+im1 = rgb2gray(imread('right.jpg'));
+
+imshow(im1)
 % Function that returnes the coordinates of the matching points, the first
 % column is the x coordinate of im1, the second column is the y coordinate
 % of im1. Column 3 is the x coordinate of im2 and column 4 is the y
@@ -28,7 +35,7 @@ im2 = rgb2gray(imread('nachtwacht2.jpg'));
 data = findMatches(im1, im2);
 
 % Function that plots the matching points connected with a line. The
-% function had to be seperated from the upper function since im1 and im2
+% function had to be separated from the upper function since im1 and im2
 % don't have the same dimensions and the reshaping alters the matching point
 % coordinates. Two images have to share the same dimensions in order to
 % make 1 image out of 2 given images. 
@@ -85,7 +92,7 @@ disp(bestmodel);
 
 % Provide the bestmodel as input for the mosaicing function
 T = maketform('projective', bestmodel');
-[x y] = tformfwd(T,[1 size(im1,2)], [1 size(im1,1)]);
+[x y] = tformfwd(T,[1 size(im1,2)], [1 size(im1,1)])
 
 xdata = [min(1,x(1)) max(size(im2,2),x(2))];
 ydata = [min(1,y(1)) max(size(im2,1),y(2))];

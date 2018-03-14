@@ -8,7 +8,7 @@ function matchingKeypoints = keypoint_matching(image1, image2)
     [f2, d2] = vl_sift(image2);
     [matches, ~] = vl_ubcmatch(d1, d2);
      
-    xy = [fa(1,matches(1,:))', fa(2,matches(1,:))'];
+    xy = [f1(1,matches(1,:))', f1(2,matches(1,:))'];
     XY = [f2(1,matches(2,:))', f2(2,matches(2,:))'];  
   
     matchingKeypoints = [xy, XY];
