@@ -1,15 +1,21 @@
-function key_matches = keypoint_matching(im1, im2)
-    % Convert the images to single format (as required for vlfeat)
-    im1 = im2single(im1);
-    im2 = im2single(im2);
+
+function matchingKeypoints = keypoint_matching(image1, image2)
+    % vlfeat requires conversion to single precision.
+    image1 = im2single(image1);
+    image2 = im2single(image2);
+
      
-    % Find matches
-    [fa, da] = vl_sift(im1);
-    [fb, db] = vl_sift(im2);
-    [matches, ~] = vl_ubcmatch(da, db);
+    % Find matching keypoints.
+    [f1, d1] = vl_sift(image1);
+    [f2, d2] = vl_sift(image2);
+    [matches, ~] = vl_ubcmatch(d1, d2);
      
-    % Return the matching points
-    xy = [fa(1,matches(1,:))', fa(2,matches(1,:))'];
-    XY = [fb(1,matches(2,:))', fb(2,matches(2,:))'];  
-    key_matches = [xy, XY];
+
+    xy = [f1(1,matches(1,:))', f1(2,matches(1,:))'];
+    XY = [f2(1,matches(2,:))', f2(2,matches(2,:))'];  
+  
+    matchingKeypoints = [xy, XY];
 end
+
+% run('D:\Users\vandi\Downloads\vlfeat-0.9.21-bin\vlfeat-0.9.21\toolbox\vl_setup')
+
