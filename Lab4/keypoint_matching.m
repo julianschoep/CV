@@ -1,4 +1,4 @@
-function matchingKeypoints = keypoint_matching(im1, im2)
+function key_matches = keypoint_matching(im1, im2)
     % Convert the images to single format (as required for vlfeat)
     im1 = im2single(im1);
     im2 = im2single(im2);
@@ -11,5 +11,5 @@ function matchingKeypoints = keypoint_matching(im1, im2)
     % Return the matching points
     xy = [fa(1,matches(1,:))', fa(2,matches(1,:))'];
     XY = [fb(1,matches(2,:))', fb(2,matches(2,:))'];  
-    matchingkeypoints = [xy, XY];
+    key_matches = [xy, XY];
 end
