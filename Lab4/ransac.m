@@ -1,4 +1,4 @@
-function [transform_params transform_matrix] = ransac(im1, im2, N, P, verbose_mode)
+function [transform_params transform_matrix,inlier_matchpoints] = ransac(im1, im2, N, P, verbose_mode)
     % Verbose mode:
     % - 0 means no plots at all
     % - 1 means plots of all subsamples
@@ -71,8 +71,10 @@ function [transform_params transform_matrix] = ransac(im1, im2, N, P, verbose_mo
 
     A = [];
     b = [];
+    inlier_matchpoints = zeros(best_n,4);
     for i = 1:best_n
         idx = best_inliers_idx(i);
+        inlier_matchpoints(i,:) = matches(idx,:);
         [x,y,u,v] = get_vars(matches(idx,:));
         [Ai,bi] = getAb_point(x,y,u,v);
         A = cat(1,A,Ai);
@@ -80,9 +82,9 @@ function [transform_params transform_matrix] = ransac(im1, im2, N, P, verbose_mo
     end
     disp("New transform parameters found");
     transform_params = pinv(A)*b;
-    [a1,a2,a3,a4,a5,a6] = get_vars(transform_params);
+    [m1,m2,m3,m4,t1,t2] = get_vars(transform_params);
 
-    transform_matrix = [a1,a2,a5;a3,a4,a6;0,0,1];
+    transform_matrix = [m1,m2,t1;m3,m4,t2;0,0,1];
     end
 
 function [A,b] = getAb_point(x,y,u,v)

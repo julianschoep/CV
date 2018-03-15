@@ -23,6 +23,7 @@ function [im_t] = transform_image(im,transform_params)
     width_t = max_c - min_c;
     height_t = max_r - min_r;
     im_t = zeros(int8(ceil(height_t)),int8( ceil(width_t)));
+    
     for r = 1:height
         for c = 1:width
             new_c = A(r,c,1);

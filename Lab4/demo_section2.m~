@@ -22,14 +22,14 @@ verbose_mode = 0
 corners = [1,1,1; 1,c,1; r,c,1; r,1,1]';
 corners_t = round(transform_matrix * corners);
 % Remove unit row
-corners_t = corners_t(1:2, :)
+corners_t = corners_t(1:2, :);
 
 % corners_t(1,:) holds the row values for the four corners. The smallest of
 % those is the shift in row, and thus horizontal?
 hor_shift = min(corners_t(1,:));
 % corners_t(1,:) holds the row values for the four corners. The smallest of
 % those is the shift in row, and thus horizontal?
-ver_shift = min(corners_t(2,:))
+ver_shift = min(corners_t(2,:));
 
 % Find most extreme dimensions
 % left = min(min(hor_shift, 1))
@@ -47,6 +47,12 @@ im2_t = transform_image(image2, transform_params);
 
 
 stitched = overlay_images(image1, im2_t,ver_shift+5,hor_shift);
+
+
+% Initialize stiched image with the correct dimensions.
+%stitched = zeros(abs(top) + abs(bottom) - 1, abs(left) + abs(right) - 1);
+
+
 
 
 % Translate to the right spot

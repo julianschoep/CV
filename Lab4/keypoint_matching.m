@@ -17,5 +17,8 @@ function matchingKeypoints = keypoint_matching(image1, image2)
     matchingKeypoints = [xy, XY];
 end
 
+% Windows
 % run('D:\Users\vandi\Downloads\vlfeat-0.9.21-bin\vlfeat-0.9.21\toolbox\vl_setup')
+% Linux
+% run('/usr/src/vlfeat-0.9.21/toolbox/vl_setup')
 
