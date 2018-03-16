@@ -19,7 +19,7 @@ plot_matches(matchingKeypoints, image1, image2);
 
 %% Ransac
 % The amount of iterations
-N = 3;
+N = 9;
 
 % Minimum amount of point matches taken (3 for affine)
 P = 4;
@@ -42,6 +42,43 @@ verbose_mode = 2;
 
 % Use handmade function and imwarp
 im1_t = transform_image(image1,transform_params1);
+imshow(im1_t)
+figure()
+imshow(im1_t_warp)
+%%
+
+im_t = im1_t;
+[h,w] = size(im);
+%%
+% Black pixels replaced with neighborhood information, as explained on
+% Piazza. Using up, down, left and right neighbors.
+
+[r, c] = find(im_t == 0);
+for i = 1:2
+    i
+    r_i = r(i)
+    c_i = c(i)
+    neighborhood = [r_i+1,c_i ; r_i-1,c_i ; r_i,c_i+1 ; r_i,c_i-1]
+    in_image = 1;
+    sum = 0;
+    for j = 1:4
+        [x y] = neighborhood(j,:)
+        im_t(neighborhood(x,y))
+        if im_t(neighborhood(x,y)) ~= 0 && x > 1 && y > 1 && x <= size(im,  && y <= y1)
+            in_image = 0
+            break
+        else
+            sum = sum + im_t(neighborhood(x,y))
+        end
+    end
+    if in_image == 0
+        im_t(r_i, c_pixel) = sum / 4
+    end
+end  
+       
+    
+
+%%
 T1 = affine2d(transform_matrix1');
 im1_t_warp = imwarp(image1, T1);
 
@@ -53,10 +90,12 @@ im2_t_warp = imwarp(image2, T2);
 figure()
 subplot(1,2,1); imshow(im1_t);
 subplot(1,2,2); imshow(im1_t_warp);
+title("Transformation from image 1 to image 2")
 
 figure()
 subplot(1,2,1); imshow(im2_t);
 subplot(1,2,2); imshow(im2_t_warp);
+title("Transformation from image 2 to image 1")
 
 %%
 
