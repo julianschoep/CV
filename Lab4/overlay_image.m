@@ -8,8 +8,7 @@ function overlay_images(image1, image2, dr, dc)
         new_height = dr + r2;
     else
         new_height = dr + r1;
-    end
-    if dc > 0
+    end    if dc > 0
         new_width = dc + c2;
     else
         new_width = dc + c1;
@@ -21,11 +20,8 @@ function overlay_images(image1, image2, dr, dc)
                 if dc > 0
                     result(r,c) = image1(r,c)
                     if r - dr > 0 & if c - cr > 0
-                        
-                            result(r,c) = image2(r-dr,c-cr)
-                            
-                else
-                    
+                            result(r,c) = image2(r-dr,c-cr)            
+                    else       
                 end
                 % first image to display in row will be image 1
             else
@@ -33,14 +29,8 @@ function overlay_images(image1, image2, dr, dc)
                     
                 else
                     
-                end
-                
-            end
-            
+                end    
+            end    
         end
     end
-    
-    
-
-
 end
