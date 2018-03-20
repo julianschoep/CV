@@ -19,7 +19,7 @@ plot_matches(matchingKeypoints, image1, image2);
 
 %% Ransac
 % The amount of iterations
-N = 9;
+N = 3;
 
 % Minimum amount of point matches taken (3 for affine)
 P = 4;
@@ -38,6 +38,8 @@ verbose_mode = 2;
 % Find transformation from image2 to image 1
 [transform_params2, transform_matrix2] = ransac(image2, image1, N, P, verbose_mode);
 
+%%
+
 % Use handmade function and imwarp
 im1_t = transform_image(image1,transform_params1);
 T1 = affine2d(transform_matrix1');
@@ -51,12 +53,10 @@ im2_t_warp = imwarp(image2, T2);
 figure()
 subplot(1,2,1); imshow(im1_t);
 subplot(1,2,2); imshow(im1_t_warp);
-title("Transformation from image 1 to image 2")
 
 figure()
 subplot(1,2,1); imshow(im2_t);
 subplot(1,2,2); imshow(im2_t_warp);
-title("Transformation from image 2 to image 1")
 
 %%
 
