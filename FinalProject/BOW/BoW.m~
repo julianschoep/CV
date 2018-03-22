@@ -6,9 +6,7 @@
 % descriptors that are returned by these two functions and recompute these
 % per image channel for opponent, normalized and RGB. Not sure if that's
 % right. Also, it seems to me the keypoints returned by vl_dsift() are
-% simply all the image-pixel coordinates with certain distance from the
-% edge of the image.. Running vl_dsift is then actually an expensive way of
-% obtaining these points..
+% simply all the image-pixel coordinates with certain distance from the 
  
 % Another thing to figure out:
 % The SIFT three channel variants (RGB, opponent etc) return n descriptors
@@ -34,7 +32,7 @@ motorbikes = load_img_dir(motorbikes_path);
 %% Sample images
 % sample_images(num_samples, [datasets]*)
 % Randomly samples (without replacement) <num_samples> images from each of the datasets.
-image_set = sample_images(100,airplanes, cars, faces, motorbikes);
+image_set = sample_images(2,airplanes, cars, faces, motorbikes);
 
 
 %% % Get descriptors.
@@ -47,26 +45,16 @@ image_set = sample_images(100,airplanes, cars, faces, motorbikes);
 % useDenseKeypoints is a boolean specifying whether to use dense keypoints,
 % or use keypoints as returned by vl_sift.
 
-% REMEMBER TO FILTER OUT GRAY IMAGES WHEN USING 3 CHANNEL SIFT
-image_set = image_set(cellfun('ndims',image_set)==3);
-% Get descriptors
+
 descriptors = getDescriptors(@OpponentSIFT, image_set, false);
 %d = OpponentSIFT(im,densebool);
 
 %% 
 
-% DO K-means clustering to construct vocabulary
+% DO K-means clustering
 
 vocabularySize = 400;
-[vocabulary, assignments] = vl_kmeans(double(descriptors), vocabularySize);
+[centers, assignments] = vl_kmeans(double(descriptors), vocabularySize);
 
-%random image for testing
-sample = datasample(image_set,1);
-im = sample{1};
 
-im_descriptors = OpponentSIFT(im,false);
-
-im_words = get_visual_words(im_descriptors,vocabulary);
-
-H = histogram(im_words, vocabularySize);
 
