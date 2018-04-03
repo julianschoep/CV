@@ -1,28 +1,18 @@
-function [keypoints,f] = extract_keypoints_DSIFT(image)
+function [keypoints] = extract_keypoints_DSIFT(image)
     % Extract dense keypoints, but subsample them to only take every 10th
     % pixel
-    image = im2single(rgb2gray(image));
-    
-    binSize = 8;
-    magnif = 3;
-    image_smoothed = vl_imsmooth(image,sqrt((binSize/magnif)^2-.25));
-    % Find matching keypoints.
-    [f, d] = vl_dsift(image_smoothed,'size',binSize);
-    % Take every 10th keypoint
-    
-    n = size(f,2);
-    cntr = 0;
-    for i= 1:n
-        if mod(cntr,10) == 0
-            if ~exist('keypoints','var')
-                keypoints = f(:,i)
-            else
-                keypoints = cat(2, keypoints, f(:,i));
-            end
-            
+    [r,c,ch] = size(image);
+    padding = 13;
+    l = (r/10)*(c/10);
+    keypoints = cell(1,l);
+    cntr = 1;
+    for x = padding:10:(c-padding)
+        for y = padding:10:(r-padding)
+            keypoints{cntr} = [x;y];
+            cntr = cntr +1;
         end
-        cntr = cntr + 1;
     end
+    keypoints = cell2mat(keypoints);
 end
 
 

@@ -1,4 +1,4 @@
-function [image_set, varargout] = sample_images(num_samples,varargin)
+function [image_set, set_idx] = sample_images_test(num_samples,varargin)
     num_datasets = size(varargin,2);
     % Make sure not too sample more images than available in the imagesets.
     % Number of samples will be the minimum number available in each class,
@@ -10,7 +10,7 @@ function [image_set, varargout] = sample_images(num_samples,varargin)
     end
     varargout = cell(num_datasets,1);
     image_set = cell(num_datasets*num_samples,1);
-
+    set_idx = zeros(num_datasets*num_samples,1);
     idx = 0
     for i = 1:num_datasets
        dataset_i = varargin{i} 
@@ -20,6 +20,7 @@ function [image_set, varargout] = sample_images(num_samples,varargin)
        for j= 1:num_samples
           idx = idx + 1;
           image_set{idx} = dataset_sample{j};
+          set_idx(idx) = I(j)+((i-1)*num_samples);
        end
     end
 end

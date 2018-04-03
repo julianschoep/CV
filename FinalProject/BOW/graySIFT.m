@@ -1,10 +1,14 @@
 function [d] = graySIFT(im, denseBool)
-    im = im2single(rgb2gray(im));
+    ch = size(im,3);
+    if ch == 3
+        im = im2single(rgb2gray(im));
+    else
+        im = im2single(im);
+    end
+    
     if denseBool
-        binSize = 8;
-        magnif = 3;
-        image_smoothed = vl_imsmooth(im,sqrt((binSize/magnif)^2-.25));
-        [f, d] = vl_dsift(image_smoothed,'size',binSize);
+        
+        [f, d] = vl_PHOW(im,'Step',10);
         
     else
         [f, d] = vl_sift(im);
