@@ -1,0 +1,60 @@
+% Demo script that combines all the Bag-Of-Words classification method
+
+% To figure out: The only difference between the sift and dense sift
+% implementation of for example OpponentSift lies in the way the keypoints
+% are generated; either using vl_sift() of vl_dsift(). I throw away the
+% descriptors that are returned by these two functions and recompute these
+% per image channel for opponent, normalized and RGB. Not sure if that's
+% right. Also, it seems to me the keypoints returned by vl_dsift() are
+% simply all the image-pixel coordinates with certain distance from the 
+ 
+% Another thing to figure out:
+% The SIFT three channel variants (RGB, opponent etc) return n descriptors
+% per channel. I concat these descriptors along the third dimension, so you
+% get 128xnx3 descriptor objects back. This is not clusterable however (I
+% think?). So now I just throw all the descriptors in one long list (of
+% 128x(n*3). I'm not sure if this is the right way. Issue on piazza: https://piazza.com/class/jd4nm7yg2wt7of?cid=87
+
+%% LOAD VL FEAT
+run('/usr/src/vlfeat-0.9.21/toolbox/vl_setup')
+
+%% Load images.
+airplanes_path = '../Caltech4/ImageData/airplanes_train/'
+cars_path = '../Caltech4/ImageData/cars_train/'
+faces_path = '../Caltech4/ImageData/faces_train/'
+motorbikes_path = '../Caltech4/ImageData/motorbikes_train/'
+
+airplanes = load_img_dir(airplanes_path);
+cars = load_img_dir(cars_path);
+faces = load_img_dir(faces_path);
+motorbikes = load_img_dir(motorbikes_path);
+
+%% Sample images
+% sample_images(num_samples, [datasets]*)
+% Randomly samples (without replacement) <num_samples> images from each of the datasets.
+image_set = sample_images(2,airplanes, cars, faces, motorbikes);
+
+
+%% % Get descriptors.
+% getDescriptors(@sift_function, image_set, useDenseKeypoints)
+% available sift functions:
+% - OpponentSIFT
+% - RGBSIFT
+% - rgb_SIFT
+% - graySIFT
+% useDenseKeypoints is a boolean specifying whether to use dense keypoints,
+% or use keypoints as returned by vl_sift.
+
+
+descriptors = getDescriptors(@OpponentSIFT, image_set, false);
+%d = OpponentSIFT(im,densebool);
+
+%% 
+
+% DO K-means clustering
+
+vocabularySize = 400;
+[centers, assignments] = vl_kmeans(double(descriptors), vocabularySize);
+
+
+
