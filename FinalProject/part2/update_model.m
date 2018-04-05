@@ -5,21 +5,34 @@ opts = vl_argparse(opts, varargin) ;
 
 %% TODO: PLAY WITH THESE PARAMETERTS TO GET A BETTER ACCURACY
 
+% Default
+% lr_prev_layers = [.2, 2];
+% lr_new_layers  = [1, 4]; 
+
 lr_prev_layers = [.2, 2];
 lr_new_layers  = [1, 4]; 
 
+% net.meta.trainOpts.learningRate = [ 0.05*ones(1,5 * multiplier) ...
+%                                     0.01*ones(1,5 * multiplier) ...
+%                                     0.005*ones(1,10 * multiplier)...
+%                                     0.0005*ones(1,10 * multiplier)...
+%                                     0.00005*ones(1,10 * multiplier)...
+
 lr = lr_prev_layers ;
+
+% Set multiplier to 1, 2, 3 for 40, 80, 120 epochs respectively.
+multiplier = 3
 
 % Meta parameters
 net.meta.inputSize = [32 32 3] ;
-net.meta.trainOpts.learningRate = [ 0.05*ones(1,20) ...
-                                    0.005*ones(1,20)...
-                                    0.0005*ones(1,10)...
+net.meta.trainOpts.learningRate = [ 0.05*ones(1,20 * multiplier) ...
+                                    0.005*ones(1,10 * multiplier)...
+                                    0.0005*ones(1,10 * multiplier)...
                                     ] ;
 net.meta.trainOpts.weightDecay = 0.0001 ;
 net.meta.trainOpts.batchSize = 100 ;
-net.meta.trainOpts.numEpochs = numel(net.meta.trainOpts.learningRate) ;
-
+net.meta.trainOpts.numEpochs = numel(net.meta.trainOpts.learningRate)
+net.meta.trainOpts.learningRate
 %% Define network 
 net.layers = {} ;
 
@@ -73,8 +86,10 @@ net.layers{end+1} = struct('type', 'relu') ;
 %% TODO: Define the structure here, so that the network outputs 4-class rather than 10 (as in the pretrained network)
 % Block 5
 
-% NEW_INPUT_SIZE  = X
-% NEW_OUTPUT_SIZE = Y
+% Input images are resized to match the network's size as clarified on
+% Piazza. Output size is set to 4.
+NEW_INPUT_SIZE  = 32
+NEW_OUTPUT_SIZE = 4
 
 net.layers{end+1} = struct('type', 'conv', ...
                            'weights', {{0.05*randn(1,1,NEW_INPUT_SIZE,NEW_OUTPUT_SIZE, 'single'), zeros(1,NEW_OUTPUT_SIZE,'single')}}, ...

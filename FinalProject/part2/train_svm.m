@@ -1,5 +1,6 @@
-function train_svm(nets, data)
-
+% Adjust function to return the needed labels and features for
+% visualization.
+function [pre_labels, pre_features, fine_labels, fine_features] = train_svm(nets, data)
 %% replace loss with the classification as we will extract features
 nets.pre_trained.layers{end}.type = 'softmax';
 nets.fine_tuned.layers{end}.type = 'softmax';
@@ -7,6 +8,11 @@ nets.fine_tuned.layers{end}.type = 'softmax';
 %% extract features and train SVM classifiers, by validating their hyperparameters
 [svm.pre_trained.trainset, svm.pre_trained.testset] = get_svm_data(data, nets.pre_trained);
 [svm.fine_tuned.trainset,  svm.fine_tuned.testset] = get_svm_data(data, nets.fine_tuned);
+
+pre_labels = svm.pre_trained.trainset.labels;
+pre_features = svm.pre_trained.trainset.features;
+fine_labels = svm.fine_tuned.trainset.labels;
+fine_features = svm.fine_tuned.trainset.features;
 
 %% measure the accuracy of different settings
 [nn.accuracy] = get_nn_accuracy(nets.fine_tuned, data);
